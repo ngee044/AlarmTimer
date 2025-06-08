@@ -82,8 +82,8 @@ void MainWindow::slot_stop_reset()
 	else
 	{
 		elapsed_seconds_ = 0;
-		current_time_ = "00:00:00";
-		target_time_ = "00:00:00";
+		current_time_ = "00 : 00 : 00";
+		target_time_ = "00 : 00 : 00";
 
 		update_display();
 	}
@@ -108,12 +108,16 @@ void MainWindow::slot_set_timer()
 
 void MainWindow::update_display()
 {
-	current_time_ = QTime(0,0).addSecs(elapsed_seconds_).toString("hh:mm:ss");
+	current_time_ = QTime(0,0).addSecs(elapsed_seconds_).toString("hh : mm : ss");
 	ui->CurrentTime->setText(current_time_);
 }
 
 void MainWindow::slot_start_timer()
 {
+
+	QString current_local_time = QTime::currentTime().toString("hh : mm : ss");
+	ui->CurrentLocalTime->setText("Time: [" + current_local_time + "]");
+
 	if (!started_)
 	{
 		return;
