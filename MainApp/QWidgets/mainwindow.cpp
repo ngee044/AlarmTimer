@@ -59,7 +59,7 @@ void MainWindow::connected()
 	}
 
 	connect(qtimer_, &QTimer::timeout, this, &MainWindow::slot_start_timer);
-	qtimer_->setInterval(100); 
+	qtimer_->setInterval(1000); 
 	qtimer_->start();
 
 	connect(ui->StartButton, &QPushButton::clicked, this, &MainWindow::slot_start);
