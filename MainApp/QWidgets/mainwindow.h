@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 #include <QTimer>
+#include <QLabel>
+
+#include <vector>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }  
