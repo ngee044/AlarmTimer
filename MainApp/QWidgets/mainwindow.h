@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTimer>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }  
@@ -9,14 +10,38 @@ QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+	explicit MainWindow(QWidget *parent = nullptr);
+	~MainWindow();
+
+	void initialize();
+	void connected();
+
+public slots:
+	void slot_start_timer();
+	void slot_start();
+	void slot_stop_reset();
+	void slot_lap();
+	void slot_set_timer();
+
+protected:
+	void update_display();
 
 private:
-    Ui::MainWindow *ui;  
+	Ui::MainWindow *ui;
+
+	bool started_;
+	
+	QTimer* qtimer_;
+	QString current_time_;
+	QString target_time_;
+
+	int elapsed_seconds_;
+	int lap_count_;
+	std::vector<QLabel*> lap_labels_;
+
 };
 
 #endif
