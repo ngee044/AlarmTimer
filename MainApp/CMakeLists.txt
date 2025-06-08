@@ -18,8 +18,8 @@ list (APPEND CMAKE_PREFIX_PATH
 	"${QT_ROOT}/${QT_COMPILER}"
 	"${QT_ROOT}/${QT_COMPILER}/lib/cmake")
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Core)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Core)
 
 # 5) 소스·헤더·리소스 파일 목록
 set(SOURCES
@@ -37,12 +37,19 @@ set(SOURCES
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_include_directories(${PROJECT_NAME}
-	PRIVATE
-		${CMAKE_CURRENT_SOURCE_DIR}/Core
-		${CMAKE_CURRENT_SOURCE_DIR}/QWidgets
-)
+if (WIN32)
+    target_link_options(${PROJECT_NAME} PRIVATE
+        $<$<CONFIG:Release>:/SUBSYSTEM:WINDOWS>
+    )
 
-target_link_libraries(${PROJECT_NAME}
-    PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
-)
+    if (QT_VERSION_MAJOR EQUAL 5 AND TARGET Qt5::WinMain)
+        target_link_libraries(${PROJECT_NAME} PRIVATE
+            $<$<CONFIG:Release>:Qt5::WinMain>)
+    elseif(QT_VERSION_MAJOR EQUAL 6 AND TARGET Qt6::EntryPoint)
+        target_link_libraries(${PROJECT_NAME} PRIVATE
+            $<$<CONFIG:Release>:Qt6::EntryPoint>)
+    endif()
+endif()
+
+target_include_directories(${PROJECT_NAME} PRIVATE Core QWidgets)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Core)
