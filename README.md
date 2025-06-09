@@ -1,10 +1,10 @@
-# AlramTimer
+# AlarmTimer
 
 A Qt-based alarm timer application
 
 ## 📋 Overview
 
-AlramTimer is a cross-platform alarm timer application developed using the Qt Framework. It provides a simple and intuitive interface for users to set desired alarm times and receive notifications.
+AlarmTimer is a cross-platform alarm timer application developed using the Qt Framework. It provides a simple and intuitive interface for users to set desired alarm times and receive notifications.
 
 ## ✨ Key Features
 
@@ -22,7 +22,7 @@ AlramTimer is a cross-platform alarm timer application developed using the Qt Fr
 ## 📁 Project Structure
 
 ```
-AlramTimer/
+AlarmTimer/
 ├── CMakeLists.txt          # Main CMake configuration file
 ├── MainApp/                # Main application directory
 │   ├── main.cpp           # Application entry point
@@ -59,8 +59,8 @@ If Qt is installed in a different location, modify the `QT_ROOT` variable in `Ma
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/ngee044/AlramTimer.git
-cd AlramTimer
+git clone https://github.com/ngee044/AlarmTimer.git
+cd AlarmTimer
 ```
 
 2. **Create build directory**
@@ -135,7 +135,7 @@ This project is distributed under the MIT License. See the [LICENSE](LICENSE) fi
 
 ## 🐛 Bug Reports & Feature Requests
 
-If you find a bug or want to suggest a new feature, please use the [Issues](https://github.com/ngee044/AlramTimer/issues) page.
+If you find a bug or want to suggest a new feature, please use the [Issues](https://github.com/ngee044/AlarmTimer/issues) page.
 
 ## 📊 Version Information
 
