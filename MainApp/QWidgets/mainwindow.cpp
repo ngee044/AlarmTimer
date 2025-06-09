@@ -102,13 +102,21 @@ void MainWindow::slot_lap()
 
 void MainWindow::slot_set_timer()
 {
-	// TODO
-	// set target time
 	if (target_time_dialog_ == nullptr)
 	{
 		target_time_dialog_ = new TargetTimeDialog(this);
+		connect(target_time_dialog_, &TargetTimeDialog::accepted, this, [this]() {
+			target_time_ = target_time_dialog_->target_time();
+			ui->TargetTime->setText(target_time_);
+		});
 	}
 
+	target_time_dialog_->show();
+	if (target_time_dialog_->exec() == QDialog::Accepted)
+	{
+		target_time_ = target_time_dialog_->target_time();
+		ui->TargetTime->setText(target_time_);
+	}
 }
 
 void MainWindow::update_display()
@@ -117,9 +125,32 @@ void MainWindow::update_display()
 	ui->CurrentTime->setText(current_time_);
 }
 
+void MainWindow::check_stopwatch()
+{
+	if (target_time_ == "00 : 00 : 00")
+	{
+		// No target time set, do nothing
+		return;
+	}
+
+	if (current_time_ == target_time_)
+	{
+		// Stopwatch reached the target time
+		// TODO
+		// For example, you can show a sound
+		started_ = false;
+	}
+	else if (QTime::fromString(current_time_, "hh : mm : ss") > QTime::fromString(target_time_, "hh : mm : ss"))
+	{
+		// Stopwatch exceeded the target time
+		// TODO
+		// For example, you can show a sound
+		started_ = false;
+	}
+}
+
 void MainWindow::slot_start_timer()
 {
-
 	QString current_local_time = QTime::currentTime().toString("hh : mm : ss");
 	ui->CurrentLocalTime->setText("Time: [" + current_local_time + "]");
 
@@ -130,4 +161,5 @@ void MainWindow::slot_start_timer()
 
 	++elapsed_seconds_;
 	update_display();
+	check_stopwatch();
 }

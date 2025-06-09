@@ -33,6 +33,7 @@ public slots:
 
 protected:
 	void update_display();
+	void check_stopwatch();
 
 private:
 	Ui::MainWindow *ui;
