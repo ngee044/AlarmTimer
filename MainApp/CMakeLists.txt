@@ -33,6 +33,10 @@ set(SOURCES
     QWidgets/mainwindow.cpp
     QWidgets/mainwindow.h
     QWidgets/mainwindow.ui
+    QWidgets/TargetTimeDialog.cpp
+    QWidgets/TargetTimeDialog.h
+    QWidgets/TargetTimeDialog.ui
+
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})

@@ -104,6 +104,11 @@ void MainWindow::slot_set_timer()
 {
 	// TODO
 	// set target time
+	if (target_time_dialog_ == nullptr)
+	{
+		target_time_dialog_ = new TargetTimeDialog(this);
+	}
+
 }
 
 void MainWindow::update_display()

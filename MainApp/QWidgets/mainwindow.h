@@ -5,6 +5,8 @@
 #include <QTimer>
 #include <QLabel>
 
+#include "TargetTimeDialog.h"
+
 #include <vector>
 
 QT_BEGIN_NAMESPACE
@@ -44,7 +46,7 @@ private:
 	int elapsed_seconds_;
 	int lap_count_;
 	std::vector<QLabel*> lap_labels_;
-
+	TargetTimeDialog* target_time_dialog_;
 };
 
 #endif
