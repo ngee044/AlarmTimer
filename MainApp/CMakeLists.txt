@@ -18,8 +18,8 @@ list (APPEND CMAKE_PREFIX_PATH
 	"${QT_ROOT}/${QT_COMPILER}"
 	"${QT_ROOT}/${QT_COMPILER}/lib/cmake")
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Core)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Core)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Core Multimedia)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Core Multimedia)
 
 # 5) 소스·헤더·리소스 파일 목록
 set(SOURCES
@@ -56,4 +56,9 @@ if (WIN32)
 endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE Core QWidgets)
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Core)
+target_link_libraries(${PROJECT_NAME} PRIVATE 
+    Qt${QT_VERSION_MAJOR}::Widgets 
+    Qt${QT_VERSION_MAJOR}::Core 
+    Qt${QT_VERSION_MAJOR}::Multimedia
+)
+

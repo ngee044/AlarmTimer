@@ -12,12 +12,19 @@ MainWindow::MainWindow(QWidget *parent)
 	target_time_("00:00:00"),
 	started_(false),
 	lap_count_(0),
+	media_player_(nullptr),
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+	audio_out_(nullptr),
+#endif
+	sound_played_(false),
 	ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
 
 	initialize();
 	connected();
+
+	alarm_sound_path_ = "./alarmeffect/AlarmBgm.mp3";
 }
 
 MainWindow::~MainWindow()
@@ -46,6 +53,18 @@ void MainWindow::initialize()
 	lap_labels_.push_back(ui->label_list8);
 	lap_labels_.push_back(ui->label_list9);
 	
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+	media_player_ = new QMediaPlayer(this);
+	media_player_->setMedia(QUrl::fromLocalFile(QDir::currentPath() + "/" + alarm_sound_path_));
+	media_player_->setVolume(90); // Set volume to 50%
+#else
+	// Test if QAudioOutput and QMediaPlayer are available
+	audio_out_ = new QAudioOutput(this);
+	media_player_ = new QMediaPlayer(this);
+	media_player_->setMedia(QUrl::fromLocalFile(QDir::currentPath() + "/" + alarm_sound_path_));
+	audio_out_->setVolume(0.9); // Set volume to 50%
+#endif
+
 
 	// TODO
 	// TimeSave
@@ -85,6 +104,8 @@ void MainWindow::slot_stop_reset()
 		current_time_ = "00 : 00 : 00";
 		target_time_ = "00 : 00 : 00";
 
+		sound_played_ = false;
+		media_player_->stop();
 		update_display();
 	}
 }
@@ -133,19 +154,20 @@ void MainWindow::check_stopwatch()
 		return;
 	}
 
-	if (current_time_ == target_time_)
+	if (current_time_ >= target_time_)
 	{
-		// Stopwatch reached the target time
-		// TODO
-		// For example, you can show a sound
 		started_ = false;
-	}
-	else if (QTime::fromString(current_time_, "hh : mm : ss") > QTime::fromString(target_time_, "hh : mm : ss"))
-	{
-		// Stopwatch exceeded the target time
-		// TODO
-		// For example, you can show a sound
-		started_ = false;
+		if (!sound_played_)
+		{
+			media_player_->stop();
+			media_player_->setPosition(0);
+			media_player_->play();
+
+			sound_played_ = true;
+		}
+
+		current_time_ = target_time_;
+		ui->CurrentTime->setText(current_time_);
 	}
 }
 
