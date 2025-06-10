@@ -4,6 +4,11 @@
 #include <QMainWindow>
 #include <QTimer>
 #include <QLabel>
+#include <QMediaPlayer>   // 추가
+#include <QUrl>
+#include <QDir>
+
+#include "TargetTimeDialog.h"
 
 #include <vector>
 
@@ -31,6 +36,7 @@ public slots:
 
 protected:
 	void update_display();
+	void check_stopwatch();
 
 private:
 	Ui::MainWindow *ui;
@@ -44,7 +50,14 @@ private:
 	int elapsed_seconds_;
 	int lap_count_;
 	std::vector<QLabel*> lap_labels_;
+	TargetTimeDialog* target_time_dialog_;
+	QString alarm_sound_path_;
 
+	QMediaPlayer* media_player_;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+	QAudioOutput  *audio_out_;
+#endif
+	bool sound_played_;
 };
 
 #endif
