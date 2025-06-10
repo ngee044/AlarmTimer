@@ -1,149 +1,167 @@
 # AlarmTimer
 
-A Qt-based alarm timer application
+A Qt-based cross-platform alarm timer application with multimedia support
 
 ## 📋 Overview
 
-AlarmTimer is a cross-platform alarm timer application developed using the Qt Framework. It provides a simple and intuitive interface for users to set desired alarm times and receive notifications.
+AlarmTimer is a feature-rich alarm timer application built with Qt Framework. It provides an intuitive interface for setting multiple alarms with custom sound effects, making it perfect for reminders, timers, and scheduling tasks.
 
 ## ✨ Key Features
 
-- Qt-based GUI interface
-- Alarm time setting and management
-- Cross-platform support (Windows, macOS, Linux)
+- 🔔 Multiple alarm management with custom sounds
+- 🎵 Built-in alarm sound (MP3 support)
+- ⏰ Target time dialog for precise alarm setting
+- 🖥️ Modern Qt-based GUI interface
+- 🔧 JSON-based configuration system
+- 🎯 Cross-platform support (Windows, macOS, Linux)
+- 📱 Responsive UI design
 
 ## 🛠️ Tech Stack
 
-- **Language**: C++20
-- **GUI Framework**: Qt 5.15.2
+- **Language**: C++17/C++20
+- **GUI Framework**: Qt 5.15.2 (Qt5/Qt6 compatible)
 - **Build System**: CMake 3.20+
+- **Audio**: Qt Multimedia
+- **Configuration**: JSON
 - **Compiler**: MSVC 2019 (Windows)
 
 ## 📁 Project Structure
 
 ```
 AlarmTimer/
-├── CMakeLists.txt          # Main CMake configuration file
-├── MainApp/                # Main application directory
-│   ├── main.cpp           # Application entry point
-│   ├── CMakeLists.txt     # MainApp CMake configuration
-│   ├── Core/              # Core logic
-│   │   ├── TimeSave.h     # Time save class header
-│   │   └── TimeSave.cpp   # Time save class implementation
-│   └── QWidgets/          # Qt widget UI
-│       ├── mainwindow.h   # Main window header
-│       ├── mainwindow.cpp # Main window implementation
-│       └── mainwindow.ui  # UI design file
-└── build/                 # Build output directory
+├── CMakeLists.txt              # Root CMake configuration
+├── MainApp/                    # Main application directory
+│   ├── CMakeLists.txt         # MainApp CMake configuration
+│   ├── main.cpp               # Application entry point
+│   ├── Core/                  # Core business logic
+│   │   ├── TimeConfiguration.h     # Time configuration header
+│   │   └── TimeConfiguration.cpp   # Time configuration implementation
+│   ├── QWidgets/              # Qt UI components
+│   │   ├── mainwindow.h            # Main window header
+│   │   ├── mainwindow.cpp          # Main window implementation
+│   │   ├── mainwindow.ui           # Main window UI design
+│   │   ├── TargetTimeDialog.h      # Time setting dialog header
+│   │   ├── TargetTimeDialog.cpp    # Time setting dialog implementation
+│   │   └── TargetTimeDialog.ui     # Time setting dialog UI
+│   └── Res/                   # Resources
+│       ├── AlarmBgm.mp3           # Default alarm sound
+│       └── configuration.json     # App configuration file
+└── build/                     # Build output directory
 ```
 
 ## 🚀 Installation & Usage
 
 ### Prerequisites
 
-- CMake 3.20 or higher
-- Qt 5.15.2 or Qt 6.x
-- C++20 compatible compiler
-- Windows: Visual Studio 2019 or later
+- **CMake**: 3.20 or higher
+- **Qt**: 5.15.2 or Qt 6.x
+- **Compiler**: C++17/C++20 compatible
+  - Windows: Visual Studio 2019 or later
+  - Linux: GCC 8+ or Clang 8+
+  - macOS: Xcode 10+
 
 ### Qt Installation Path
 
-The project looks for Qt in the following default path:
+The project is configured to find Qt at:
 ```
 C:/Qt/5.15.2/msvc2019_64
 ```
 
-If Qt is installed in a different location, modify the `QT_ROOT` variable in `MainApp/CMakeLists.txt`.
+To use a different Qt installation, modify the `QT_ROOT` and `QT_COMPILER` variables in [`MainApp/CMakeLists.txt`](MainApp/CMakeLists.txt):
 
-### Build Instructions
+````cmake
+set(QT_ROOT "C:/Qt/5.15.2")
+set(QT_COMPILER "msvc2019_64")
 
-1. **Clone the repository**
-```bash
-git clone https://github.com/ngee044/AlarmTimer.git
-cd AlarmTimer
-```
+Build Instructions
+Clone the repository
+Create build directory
+Configure with CMake
+Build the project
+Run the application
+The application will automatically copy alarm sound files to the alarmeffect/ directory in the executable location.
 
-2. **Create build directory**
-```bash
-mkdir build
-cd build
-```
+Building with Visual Studio
+Open Visual Studio and select "Open Folder"
+Navigate to the project root directory
+CMake will automatically configure the project
+Build using Build > Build All (Ctrl+Shift+B)
+🎯 Core Components
+MainWindow Class
+The primary application window that manages the user interface.
 
-3. **Configure CMake**
-```bash
-cmake ..
-```
+Files: MainApp/QWidgets/mainwindow.h, mainwindow.cpp
+Features:
+Timer display and management
+Alarm controls and status
+Integration with Qt Multimedia for audio playback
+TimeConfiguration Class
+Core class for managing time settings and alarm configurations.
 
-4. **Build the project**
-```bash
-cmake --build . --config Release
-```
+Files: MainApp/Core/TimeConfiguration.h, TimeConfiguration.cpp
+Function: Handles time calculations, alarm scheduling, and configuration persistence
+TargetTimeDialog Class
+Dialog window for setting specific alarm times.
 
-5. **Run the application**
-```bash
-./out/MainApp.exe  # Windows
-./out/MainApp      # Linux/macOS
-```
+Files: MainApp/QWidgets/TargetTimeDialog.h, TargetTimeDialog.cpp
+Function: Provides intuitive time selection interface
+🔧 Configuration
+The application uses a JSON configuration file (configuration.json) for storing:
 
-### Building with Visual Studio
+Alarm settings
+Audio preferences
+UI preferences
+Default timer values
+🎵 Audio Features
+Default Sound: AlarmBgm.mp3 included
+Format Support: MP3, WAV, and other Qt Multimedia supported formats
+Custom Sounds: Place audio files in the alarmeffect/ directory
+🛠️ Development
+IDE Setup
+Visual Studio
 
-1. Open the project root directory with "Open Folder" in Visual Studio
-2. CMake will automatically configure
-3. Run `Build` > `Build All`
+Install "C++ CMake tools for Visual Studio"
+Open folder and let CMake configure automatically
+Qt Creator
 
-## 🔧 Development Environment Setup
+Open as CMake project
+Qt Creator will handle UI file editing automatically
+CLion
 
-### IDE Configuration
+Import as CMake project
+Configure Qt paths if needed
+UI Development
+UI files (.ui) can be edited with:
 
-- **Visual Studio**: Enable CMake support
-- **Qt Creator**: Open as CMake project
-- **CLion**: Import as CMake project
+Qt Designer (standalone)
+Qt Creator (integrated)
+Visual Studio Qt tools
+🤝 Contributing
+Fork the repository
+Create a feature branch (git checkout -b feature/amazing-feature)
+Commit your changes (git commit -m 'Add some amazing feature')
+Push to the branch (git push origin feature/amazing-feature)
+Open a Pull Request
+Development Guidelines
+Follow C++17/C++20 standards
+Use Qt coding conventions
+Include unit tests for new features
+Update documentation for API changes
+📝 License
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-### Qt Designer
+👤 Author
+ngee044
 
-UI files (`mainwindow.ui`) can be edited with Qt Designer.
+GitHub: @ngee044
+🐛 Issues & Support
+Found a bug or need help? Please check our Issues page.
 
-## 📂 Core Components
-
-### MainWindow Class
-Manages the main application window.
-- **Files**: `MainApp/QWidgets/mainwindow.h`, `mainwindow.cpp`
-- **Function**: Qt main window UI management
-
-### TimeSave Class
-Core class for storing and managing time-related data.
-- **Files**: `MainApp/Core/TimeSave.h`, `TimeSave.cpp`
-- **Namespace**: `MainCore`
-
-## 🤝 Contributing
-
-1. Fork this repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Create a Pull Request
-
-## 📝 License
-
-This project is distributed under the MIT License. See the [LICENSE](LICENSE) file for more information.
-
-## 👤 Author
-
-**ngee044**
-
-- GitHub: [@ngee044](https://github.com/ngee044)
-
-## 🐛 Bug Reports & Feature Requests
-
-If you find a bug or want to suggest a new feature, please use the [Issues](https://github.com/ngee044/AlarmTimer/issues) page.
-
-## 📊 Version Information
-
-- **Current Version**: 1.0.0.0
-- **Qt Version**: 5.15.2
-- **Minimum CMake Version**: 3.20
-- **C++ Standard**: C++20
-
----
-
-⭐ If you find this project useful, please give it a star!
+📊 Version Information
+Version: 1.0.0.0
+Qt Compatibility: Qt 5.15.2+ / Qt 6.x
+CMake Minimum: 3.20
+C++ Standard: C++17 (MainApp), C++20 (Root)
+🙏 Acknowledgments
+Qt Framework for the excellent GUI toolkit
+Qt Multimedia for audio playback capabilities
