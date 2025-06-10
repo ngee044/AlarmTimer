@@ -13,10 +13,12 @@ MainWindow::MainWindow(QWidget *parent)
 	started_(false),
 	lap_count_(0),
 	media_player_(nullptr),
+	target_time_dialog_(nullptr),
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 	audio_out_(nullptr),
 #endif
 	sound_played_(false),
+	alarm_sound_path_("alarmeffect/AlarmBgm.mp3"),
 	ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
@@ -24,7 +26,6 @@ MainWindow::MainWindow(QWidget *parent)
 	initialize();
 	connected();
 
-	alarm_sound_path_ = "./alarmeffect/AlarmBgm.mp3";
 }
 
 MainWindow::~MainWindow()
@@ -39,7 +40,8 @@ MainWindow::~MainWindow()
 void MainWindow::initialize()
 {
 	qtimer_ = new QTimer(this);
-
+	target_time_dialog_ = new TargetTimeDialog(this);
+		
 	lap_labels_.reserve(10); // Reserve space for 10 laps
 	
 	lap_labels_.push_back(ui->label_list0);
@@ -53,6 +55,7 @@ void MainWindow::initialize()
 	lap_labels_.push_back(ui->label_list8);
 	lap_labels_.push_back(ui->label_list9);
 	
+	qDebug () << "sound path : " << QDir::currentPath() + "/" + alarm_sound_path_;
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 	media_player_ = new QMediaPlayer(this);
 	media_player_->setMedia(QUrl::fromLocalFile(QDir::currentPath() + "/" + alarm_sound_path_));
@@ -76,6 +79,16 @@ void MainWindow::connected()
 	{
 		qtimer_ = new QTimer(this);
 	}
+
+	if (target_time_dialog_ == nullptr) 
+	{
+		target_time_dialog_ = new TargetTimeDialog(this);
+	}
+
+	connect(target_time_dialog_, &TargetTimeDialog::accepted, this, [this]() {
+			target_time_ = target_time_dialog_->target_time();
+			ui->TargetTime->setText(target_time_);
+		});
 
 	connect(qtimer_, &QTimer::timeout, this, &MainWindow::slot_start_timer);
 	qtimer_->setInterval(1000); 
@@ -102,7 +115,6 @@ void MainWindow::slot_stop_reset()
 	{
 		elapsed_seconds_ = 0;
 		current_time_ = "00 : 00 : 00";
-		target_time_ = "00 : 00 : 00";
 
 		sound_played_ = false;
 		media_player_->stop();
@@ -132,7 +144,6 @@ void MainWindow::slot_set_timer()
 		});
 	}
 
-	target_time_dialog_->show();
 	if (target_time_dialog_->exec() == QDialog::Accepted)
 	{
 		target_time_ = target_time_dialog_->target_time();
@@ -164,6 +175,8 @@ void MainWindow::check_stopwatch()
 			media_player_->play();
 
 			sound_played_ = true;
+
+			qDebug() << "Alarm sound played!";
 		}
 
 		current_time_ = target_time_;
