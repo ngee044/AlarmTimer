@@ -1,167 +1,97 @@
-# AlarmTimer
+# AlarmTimer ⏰  
+Qt-based cross-platform alarm & stopwatch application
+<!-- Badges -->
+![license](https://img.shields.io/badge/license-MIT-blue.svg)
+![platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-green)
 
-A Qt-based cross-platform alarm timer application with multimedia support
+> **AlarmTimer** lets you run an always-on stopwatch and set a target time that
+> triggers a custom MP3 alarm.  
+> Built with modern **Qt 5 / Qt 6**, C++17 and CMake.
 
-## 📋 Overview
+---
 
-AlarmTimer is a feature-rich alarm timer application built with Qt Framework. It provides an intuitive interface for setting multiple alarms with custom sound effects, making it perfect for reminders, timers, and scheduling tasks.
+## ✨ Features
+| Category | Details |
+|----------|---------|
+| **Stopwatch** | Start / Stop / Reset controls with 1 s resolution |
+| **Lap list** | Up to 10 laps are displayed in rotating order |
+| **Target Time Dialog** | Set an exact `hh:mm:ss` goal; alarm fires at or after the target |
+| **Custom alarm sound** | Plays an MP3 from `Res/AlarmBgm.mp3` (can be replaced) |
+| **JSON settings** | User preferences are saved to `Res/configuration.json` |
+| **Cross-platform build** | Works on Windows, macOS and Linux with the same CMake script |
 
-## ✨ Key Features
+---
 
-- 🔔 Multiple alarm management with custom sounds
-- 🎵 Built-in alarm sound (MP3 support)
-- ⏰ Target time dialog for precise alarm setting
-- 🖥️ Modern Qt-based GUI interface
-- 🔧 JSON-based configuration system
-- 🎯 Cross-platform support (Windows, macOS, Linux)
-- 📱 Responsive UI design
+## 🔧 Build & Run
 
-## 🛠️ Tech Stack
+### Prerequisites
+| Tool | Minimum |
+|------|---------|
+| **Qt** | 5.15.2 (or 6.x) |
+| **CMake** | 3.24 |
+| **Compiler** | • MSVC 2019 / 2022<br>• GCC 8+ or Clang 8+ |
 
-- **Language**: C++17/C++20
-- **GUI Framework**: Qt 5.15.2 (Qt5/Qt6 compatible)
-- **Build System**: CMake 3.20+
-- **Audio**: Qt Multimedia
-- **Configuration**: JSON
-- **Compiler**: MSVC 2019 (Windows)
+### Steps (command-line, out-of-source build)
 
-## 📁 Project Structure
+```bash
+git clone https://github.com/ngee044/AlarmTimer.git
+cd AlarmTimer
+cmake -B build -G "Visual Studio 17 2022" -A x64 ^
+      -DQT_ROOT="C:/Qt/5.15.2" -DQT_COMPILER="msvc2019_64"
+cmake --build build --config Release
+# Run
+build\out\Release\MainApp.exe
+````
+
+> On Linux/macOS replace the generator with `-G Ninja` (or leave default)
+> and make sure `qtbase` & `qtmultimedia` dev packages are in your `PATH`.
+
+---
+
+## 📁 Project Layout
 
 ```
 AlarmTimer/
-├── CMakeLists.txt              # Root CMake configuration
-├── MainApp/                    # Main application directory
-│   ├── CMakeLists.txt         # MainApp CMake configuration
-│   ├── main.cpp               # Application entry point
-│   ├── Core/                  # Core business logic
-│   │   ├── TimeConfiguration.h     # Time configuration header
-│   │   └── TimeConfiguration.cpp   # Time configuration implementation
-│   ├── QWidgets/              # Qt UI components
-│   │   ├── mainwindow.h            # Main window header
-│   │   ├── mainwindow.cpp          # Main window implementation
-│   │   ├── mainwindow.ui           # Main window UI design
-│   │   ├── TargetTimeDialog.h      # Time setting dialog header
-│   │   ├── TargetTimeDialog.cpp    # Time setting dialog implementation
-│   │   └── TargetTimeDialog.ui     # Time setting dialog UI
-│   └── Res/                   # Resources
-│       ├── AlarmBgm.mp3           # Default alarm sound
-│       └── configuration.json     # App configuration file
-└── build/                     # Build output directory
+├─ CMakeLists.txt          # top-level build script
+├─ MainApp/
+│  ├─ CMakeLists.txt
+│  ├─ main.cpp
+│  ├─ Core/
+│  │  └─ TimeConfiguration.*# JSON load / save
+│  ├─ QWidgets/
+│  │  ├─ mainwindow.*(.ui)
+│  │  └─ TargetTimeDialog.*(.ui)
+│  └─ Res/                 # resources copied after build
+│     ├─ AlarmBgm.mp3
+│     └─ configuration.json
+└─ build/                  # created by CMake
 ```
 
-## 🚀 Installation & Usage
+---
 
-### Prerequisites
+## 🖥️ Screenshots
 
-- **CMake**: 3.20 or higher
-- **Qt**: 5.15.2 or Qt 6.x
-- **Compiler**: C++17/C++20 compatible
-  - Windows: Visual Studio 2019 or later
-  - Linux: GCC 8+ or Clang 8+
-  - macOS: Xcode 10+
+*(add your screenshots here)* <img src="docs/screenshot_main.png" width="640">
 
-### Qt Installation Path
+---
 
-The project is configured to find Qt at:
-```
-C:/Qt/5.15.2/msvc2019_64
-```
+## 🚀 Using a Custom Alarm
 
-To use a different Qt installation, modify the `QT_ROOT` and `QT_COMPILER` variables in [`MainApp/CMakeLists.txt`](MainApp/CMakeLists.txt):
+1. Place an MP3 file in `MainApp/Res/` (e.g. `MyAlarm.mp3`).
+2. Update `alarm_sound_path_` in `mainwindow.cpp` **or** rename your file to `AlarmBgm.mp3`.
+3. Re-build (the CMake post-build step will copy it to `audioeffect`).
 
-````cmake
-set(QT_ROOT "C:/Qt/5.15.2")
-set(QT_COMPILER "msvc2019_64")
+---
 
-Build Instructions
-Clone the repository
-Create build directory
-Configure with CMake
-Build the project
-Run the application
-The application will automatically copy alarm sound files to the alarmeffect/ directory in the executable location.
+## 🤝 Contributing
 
-Building with Visual Studio
-Open Visual Studio and select "Open Folder"
-Navigate to the project root directory
-CMake will automatically configure the project
-Build using Build > Build All (Ctrl+Shift+B)
-🎯 Core Components
-MainWindow Class
-The primary application window that manages the user interface.
+Pull-requests and issues are welcome!
+Please follow the existing code style (Clang-Format) and commit with clear messages.
 
-Files: MainApp/QWidgets/mainwindow.h, mainwindow.cpp
-Features:
-Timer display and management
-Alarm controls and status
-Integration with Qt Multimedia for audio playback
-TimeConfiguration Class
-Core class for managing time settings and alarm configurations.
+---
 
-Files: MainApp/Core/TimeConfiguration.h, TimeConfiguration.cpp
-Function: Handles time calculations, alarm scheduling, and configuration persistence
-TargetTimeDialog Class
-Dialog window for setting specific alarm times.
+## 📜 License
 
-Files: MainApp/QWidgets/TargetTimeDialog.h, TargetTimeDialog.cpp
-Function: Provides intuitive time selection interface
-🔧 Configuration
-The application uses a JSON configuration file (configuration.json) for storing:
+AlarmTimer is released under the **MIT License**; see [`LICENSE`](LICENSE) for details.
 
-Alarm settings
-Audio preferences
-UI preferences
-Default timer values
-🎵 Audio Features
-Default Sound: AlarmBgm.mp3 included
-Format Support: MP3, WAV, and other Qt Multimedia supported formats
-Custom Sounds: Place audio files in the alarmeffect/ directory
-🛠️ Development
-IDE Setup
-Visual Studio
-
-Install "C++ CMake tools for Visual Studio"
-Open folder and let CMake configure automatically
-Qt Creator
-
-Open as CMake project
-Qt Creator will handle UI file editing automatically
-CLion
-
-Import as CMake project
-Configure Qt paths if needed
-UI Development
-UI files (.ui) can be edited with:
-
-Qt Designer (standalone)
-Qt Creator (integrated)
-Visual Studio Qt tools
-🤝 Contributing
-Fork the repository
-Create a feature branch (git checkout -b feature/amazing-feature)
-Commit your changes (git commit -m 'Add some amazing feature')
-Push to the branch (git push origin feature/amazing-feature)
-Open a Pull Request
-Development Guidelines
-Follow C++17/C++20 standards
-Use Qt coding conventions
-Include unit tests for new features
-Update documentation for API changes
-📝 License
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-👤 Author
-ngee044
-
-GitHub: @ngee044
-🐛 Issues & Support
-Found a bug or need help? Please check our Issues page.
-
-📊 Version Information
-Version: 1.0.0.0
-Qt Compatibility: Qt 5.15.2+ / Qt 6.x
-CMake Minimum: 3.20
-C++ Standard: C++17 (MainApp), C++20 (Root)
-🙏 Acknowledgments
-Qt Framework for the excellent GUI toolkit
-Qt Multimedia for audio playback capabilities
+---
