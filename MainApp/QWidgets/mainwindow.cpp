@@ -1,9 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <TimeSave.h>
 
 #include <QTime>
+
+using namespace MainCore;
 
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent),
@@ -19,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
 #endif
 	sound_played_(false),
 	alarm_sound_path_("alarmeffect/AlarmBgm.mp3"),
+	config_path_("alarmeffect/configuration.json"),
 	ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
@@ -30,10 +32,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-	// TODO
-	// Save time data if needed
-	// TimeSave time_save; // Example usage, if needed
-
+	time_config_.save();
+	
 	delete ui;
 }
 
@@ -68,9 +68,10 @@ void MainWindow::initialize()
 	audio_out_->setVolume(0.9); // Set volume to 50%
 #endif
 
+	time_config_.load(config_path_);
 
-	// TODO
-	// TimeSave
+	target_time_ = time_config_.target_time();
+	ui->TargetTime->setText(target_time_);
 }
 
 void MainWindow::connected()
@@ -149,6 +150,8 @@ void MainWindow::slot_set_timer()
 		target_time_ = target_time_dialog_->target_time();
 		ui->TargetTime->setText(target_time_);
 	}
+
+	time_config_.target_time(target_time_);
 }
 
 void MainWindow::update_display()

@@ -8,6 +8,7 @@
 #include <QUrl>
 #include <QDir>
 
+#include "TimeConfiguration.h"
 #include "TargetTimeDialog.h"
 
 #include <vector>
@@ -52,12 +53,14 @@ private:
 	std::vector<QLabel*> lap_labels_;
 	TargetTimeDialog* target_time_dialog_;
 	QString alarm_sound_path_;
+	QString config_path_;
 
 	QMediaPlayer* media_player_;
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 	QAudioOutput  *audio_out_;
 #endif
 	bool sound_played_;
+	MainCore::TimeConfiguration time_config_;
 };
 
 #endif
