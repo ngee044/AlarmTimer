@@ -26,8 +26,8 @@ set(SOURCES
     main.cpp
 
 	# Core
-	Core/TimeSave.cpp
-	Core/TimeSave.h
+	Core/TimeConfiguration.cpp
+	Core/TimeConfiguration.h
 
 	# Widgets
     QWidgets/mainwindow.cpp
